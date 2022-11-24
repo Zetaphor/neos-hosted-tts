@@ -1,0 +1,5 @@
+flask
+gtts
+apscheduler
+arrow
+pydub
