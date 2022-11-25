@@ -3,3 +3,4 @@ gtts
 apscheduler
 arrow
 pydub
+gunicorn
