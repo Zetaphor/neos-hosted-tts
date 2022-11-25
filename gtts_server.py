@@ -57,10 +57,10 @@ def get_gtts():
     try:
         Path("data").mkdir(parents=True, exist_ok=True)
         if request.method == 'GET':
-            text = request.args.get('text', None)
+            text = request.args.get('text', "")
             lang = request.args.get('lang', "en-us").lower()
         elif request.method == 'POST':
-            text = request.form.get('text', None)
+            text = request.form.get('text', "")
             lang = request.form.get('lang', "en-us").lower()
         gtts_language = gtts_language_tlds[lang]
         filename = 'gtts_' + lang + '_' + hashlib.md5(text.encode()).hexdigest()
@@ -91,4 +91,4 @@ if __name__ == '__main__':
     # Shut down the scheduler when exiting the app
     atexit.register(lambda: scheduler.shutdown())
     # Threaded option to enable multiple instances for multiple user access support
-    app.run(threaded=True, port=5000, host='0.0.0.0')
+    app.run(threaded=True, port=8000, host='0.0.0.0')
