@@ -1,5 +1,13 @@
 # Neos Hosted TTS
 
+**The developer of this software and the software itself is in no way officially affiliated with or endorsed by Neos, Solirax, or any representative of the Neos staff.**
+
+This is a hobby project built by an enthusiast as a community contribution. If you encounter issues please create open an issue on this repo and/or contact Zetaphor in Neos, Zetaphor#0237 on Discord, or Zetaphor on Guilded.
+
+Want to support this project? [Go donate to Frooxius' Patreon!](https://www.patreon.com/frooxius)
+
+## About
+
 This is a hosted python script that provides TTS functionality in Neos. This repo is to serve as an alternative to [the neos-local-tts project](https://github.com/Zetaphor/neos-local-tts).
 
 The python codebase and in-world object is a heavily modified version of the [original ttswrapper by TessaCoil](https://github.com/Phylliida/ttswrapper).
