@@ -1,15 +1,15 @@
+from pydub import AudioSegment
+import atexit
+import arrow
+from apscheduler.triggers.interval import IntervalTrigger
+from apscheduler.schedulers.background import BackgroundScheduler
+from pathlib import Path
+import hashlib
+import os
+from gtts import gTTS
 from flask import Flask, request, send_file
 app = Flask(__name__)
 
-from gtts import gTTS
-import os
-import hashlib
-from pathlib import Path
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.triggers.interval import IntervalTrigger
-import arrow
-import atexit
-from pydub import AudioSegment
 
 gtts_language_tlds = {
     'en-au': ['en', 'com.au'],
@@ -28,10 +28,17 @@ gtts_language_tlds = {
     'es-mx': ['es', 'com.mx'],
     'es-es': ['es', 'es'],
     'es-us': ['es', 'com'],
+    # Default languages if no country locale is included
+    'en': ['en', 'com'],
+    'es': ['es', 'com'],
+    'pt': ['pt', 'pt'],
+    'zh': ['zh-CN', 'com'],
 }
 
 # From https://stackoverflow.com/questions/12485666/python-deleting-all-files-in-a-folder-older-than-x-days
 # Deletes all data files more than 4 hours old
+
+
 def cleanUpFiles():
     criticalTime = arrow.now().shift(hours=-2)
     print("running cleanup")
@@ -45,10 +52,12 @@ def cleanUpFiles():
         print("removing: " + str(fileToRemove))
         os.remove(fileToRemove)
 
+
 @app.route('/data/<path:filename>', methods=['GET', 'POST'])
 def getData(filename):
     Path("data").mkdir(parents=True, exist_ok=True)
     return send_file('data/' + filename)
+
 
 @app.route('/gtts', methods=['GET', 'POST'])
 def get_gtts():
@@ -63,7 +72,8 @@ def get_gtts():
             text = request.form.get('text', "")
             lang = request.form.get('lang', "en-us").lower()
         gtts_language = gtts_language_tlds[lang]
-        filename = 'gtts_' + lang + '_' + hashlib.md5(text.encode()).hexdigest()
+        filename = 'gtts_' + lang + '_' + \
+            hashlib.md5(text.encode()).hexdigest()
         outfilemp3 = "data/" + filename + ".mp3"
         outfileogg = "data/" + filename + ".ogg"
         if not os.path.isfile(outfileogg):
@@ -76,12 +86,13 @@ def get_gtts():
         # print
         return "Error" + "\n" + "\n" + text
 
+
 if __name__ == '__main__':
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(cleanUpFiles, IntervalTrigger(seconds=60*60*3), id="filecleanup")
+    scheduler.add_job(cleanUpFiles, IntervalTrigger(
+        seconds=60*60*3), id="filecleanup")
     scheduler.start()
-
 
     def cleanupScheduler():
         scheduler.shutdown()
