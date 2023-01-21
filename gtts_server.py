@@ -80,10 +80,10 @@ def get_gtts():
             text = request.form.get('text', "")
             lang = request.form.get('lang', "en-us").lower()
 
-        gtts_language = gtts_language_tlds[lang]
-
         if lang in gtts_default_locales:
-            gtts_language = gtts_language_tlds[gtts_default_locales[lang]]
+            lang = gtts_default_locales[lang]
+
+        gtts_language = gtts_language_tlds[lang]
 
         filename = 'gtts_' + lang + '_' + \
             hashlib.md5(text.encode()).hexdigest()
