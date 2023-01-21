@@ -35,6 +35,14 @@ gtts_language_tlds = {
     'zh': ['zh-CN', 'com'],
 }
 
+gtts_default_locales = {
+    'en': 'en-us',
+    'es': 'es-us',
+    'pt': 'pt-pt',
+    'fr': 'fr-fr',
+    'zh': 'zh-cn',
+}
+
 # From https://stackoverflow.com/questions/12485666/python-deleting-all-files-in-a-folder-older-than-x-days
 # Deletes all data files more than 4 hours old
 
@@ -71,7 +79,12 @@ def get_gtts():
         elif request.method == 'POST':
             text = request.form.get('text', "")
             lang = request.form.get('lang', "en-us").lower()
+
         gtts_language = gtts_language_tlds[lang]
+
+        if lang in gtts_default_locales:
+            gtts_language = gtts_language_tlds[gtts_default_locales[lang]]
+
         filename = 'gtts_' + lang + '_' + \
             hashlib.md5(text.encode()).hexdigest()
         outfilemp3 = "data/" + filename + ".mp3"
